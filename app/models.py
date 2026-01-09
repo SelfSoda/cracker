@@ -1,8 +1,8 @@
 """数据库模型"""
-from sqlalchemy import Column, Integer, String, Float, DateTime, Enum as SQLEnum
-from sqlalchemy.sql import func
-from datetime import datetime
 import enum
+
+from sqlalchemy import Column, Integer, String, Float, DateTime, Date, Enum as SQLEnum
+from sqlalchemy.sql import func
 
 from app.database import Base
 
@@ -11,9 +11,7 @@ class InvestmentType(str, enum.Enum):
     """投资类型枚举"""
     STOCK = "stock"  # 股票
     FUND = "fund"  # 基金
-    BOND = "bond"  # 债券
     PRECIOUS_METAL = "precious_metal"  # 贵金属
-    OTHER = "other"  # 其他
 
 
 class TransactionType(str, enum.Enum):
@@ -34,10 +32,9 @@ class InvestmentRecord(Base):
     quantity = Column(Float, nullable=False, comment="交易数量")
     price = Column(Float, nullable=False, comment="交易价格")
     amount = Column(Float, nullable=False, comment="交易金额")
-    transaction_date = Column(DateTime, nullable=False, index=True, comment="交易日期时间")
+    transaction_date = Column(Date, nullable=False, index=True, comment="交易日期时间")
     fee = Column(Float, default=0.0, comment="手续费/佣金")
     tax = Column(Float, default=0.0, comment="税费（印花税、过户费等）")
-    market = Column(String, nullable=True, comment="交易市场（如：A股、场内、场外等）")
     broker = Column(String, nullable=True, comment="券商/交易平台（如：华泰证券、支付宝、天天基金等）")
     account = Column(String, nullable=True, comment="交易账户标识（如有多个账户）")
     order_id = Column(String, nullable=True, index=True, comment="交易单号/订单号（用于对账）")
@@ -53,6 +50,5 @@ class PriceHistory(Base):
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False, comment="投资标的代码")
     price = Column(Float, nullable=False, comment="价格")
-    date = Column(DateTime, nullable=False, index=True, comment="价格日期")
+    date = Column(Date, nullable=False, index=True, comment="价格日期")
     created_at = Column(DateTime, server_default=func.now(), comment="创建时间")
-

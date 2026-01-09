@@ -1,9 +1,12 @@
 """数据库配置和会话管理"""
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./investment.db"
+DATA_PATH = os.environ["DATA_PATH"]
+SQLALCHEMY_DATABASE_URL = f"sqlite:///{DATA_PATH}/investment.db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
@@ -25,4 +28,3 @@ def get_db():
 def init_db():
     """初始化数据库，创建所有表"""
     Base.metadata.create_all(bind=engine)
-

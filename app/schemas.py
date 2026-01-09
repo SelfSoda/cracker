@@ -79,6 +79,36 @@ class PriceData(BaseModel):
     date: datetime
 
 
+class HistoricalPriceData(BaseModel):
+    """历史价格数据点"""
+    date: datetime = Field(..., description="日期")
+    price: float = Field(..., description="价格")
+    volume: Optional[float] = Field(None, description="成交量（股票）")
+    open: Optional[float] = Field(None, description="开盘价（股票）")
+    high: Optional[float] = Field(None, description="最高价（股票）")
+    low: Optional[float] = Field(None, description="最低价（股票）")
+    close: Optional[float] = Field(None, description="收盘价（股票）")
+
+
+class HistoricalPriceResponse(BaseModel):
+    """历史价格响应"""
+    symbol: str
+    investment_type: InvestmentType
+    data: List[HistoricalPriceData] = Field(..., description="历史价格数据列表")
+
+
+class BatchPriceRequest(BaseModel):
+    """批量获取价格请求"""
+    symbols: List[str] = Field(..., description="标的代码列表")
+    investment_type: InvestmentType = Field(..., description="投资类型")
+
+
+class BatchPriceResponse(BaseModel):
+    """批量价格响应"""
+    prices: List[PriceData] = Field(..., description="价格数据列表")
+    failed: List[str] = Field(default_factory=list, description="获取失败的标的代码列表")
+
+
 class PortfolioSummary(BaseModel):
     """投资组合摘要"""
     total_cost: float = Field(..., description="总成本")

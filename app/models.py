@@ -12,6 +12,7 @@ class InvestmentType(str, enum.Enum):
     STOCK = "stock"  # 股票
     FUND = "fund"  # 基金
     BOND = "bond"  # 债券
+    PRECIOUS_METAL = "precious_metal"  # 贵金属
     OTHER = "other"  # 其他
 
 
